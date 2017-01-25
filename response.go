@@ -76,7 +76,7 @@ func ReadResponse(ws *websocket.Conn) (data []byte, err error) {
 }
 
 func (req *Request) Exec() (data []byte, err error) {
-	return req.ExecWithTimeout(time.Duration(10) * time.Second)
+	return req.ExecWithTimeout(time.Duration(10 * time.Second))
 }
 
 func (req *Request) ExecWithTimeout(timeoutDuration time.Duration) (data []byte, err error) {
