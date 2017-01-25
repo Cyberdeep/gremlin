@@ -76,6 +76,10 @@ func ReadResponse(ws *websocket.Conn) (data []byte, err error) {
 }
 
 func (req *Request) Exec() (data []byte, err error) {
+	ExecWithTimeout(data, err, 10)
+}
+
+func (req *Request) ExecWithTimeout() (data []byte, err error, secondsTimeout int) {
 	// Prepare the Data
 	message, err := json.Marshal(req)
 	if err != nil {
@@ -99,10 +103,10 @@ func (req *Request) Exec() (data []byte, err error) {
 		return
 	}
 	defer ws.Close()
-	if err = ws.SetWriteDeadline(time.Now().Add(10 * time.Second)); err != nil {
+	if err = ws.SetWriteDeadline(time.Now().Add(secondsTimeout * time.Second)); err != nil {
 		return
 	}
-	if err = ws.SetReadDeadline(time.Now().Add(10 * time.Second)); err != nil {
+	if err = ws.SetReadDeadline(time.Now().Add(secondsTimeout * time.Second)); err != nil {
 		return
 	}
 	if err = ws.WriteMessage(websocket.BinaryMessage, requestMessage); err != nil {
